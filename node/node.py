@@ -8,7 +8,8 @@ from utils.verification import Verification
 
 class Node:
     def __init__(self):
-        self.id = str(uuid4())
+        # self.id = str(uuid4())
+        self.id = 'JAMES'
         self.blockchain = Blockchain(self.id)
 
     def get_user_choice(self):
@@ -39,15 +40,13 @@ class Node:
             print('2: Mine a new block')
             print('3: Output the blockchain')
             print('4: Verify transactions')
-            print('h: Manipulate the blockchain')
             print('q: To quit')
 
             user_choice = self.get_user_choice()
 
             print_spacer()
 
-            verifier = Verification()
-            if not verifier.verify_chain(self.blockchain.chain):
+            if not Verification.verify_chain(self.blockchain.chain):
                 print('Invalid blockchain')
                 waiting_for_input = False
 
@@ -59,7 +58,7 @@ class Node:
                     print('Added transaction')
                 else:
                     print('Transaction failed - insufficient funds')
-                print(self.blockchain.open_transactions)
+                print(self.blockchain.get_open_transactions())
 
             elif user_choice == '2':
                 self.blockchain.mine_block()
@@ -68,19 +67,10 @@ class Node:
                 self.print_blockchain()
 
             elif user_choice == '4':
-                verifier = Verification()
-                if verifier.verify_transactions(self.blockchain.open_transactions, self.blockchain.get_balance):
+                if Verification.verify_transactions(self.blockchain.get_open_transactions(), self.blockchain.get_balance):
                     print('All transactions are valid')
                 else:
                     print('There are invalid transactions')
-
-            elif user_choice == 'h':
-                if len(self.blockchain) >= 1:
-                    self.blockchain.chain[0] = {
-                        'previous_hash': '',
-                        'index': 0,
-                        'transactions': [{'sender': 'Chris', 'recipient': 'Max', 'amount': 100}]
-                    }
 
             elif user_choice == 'q':
                 waiting_for_input = False
