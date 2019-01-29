@@ -3,3 +3,4 @@ def print_spacer():
 
     print('\n' * 0)
     print('-' * 20)
+    print('\n' * 0)

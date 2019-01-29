@@ -112,6 +112,9 @@ class Blockchain:
     def add_transaction(self, sender, recipient, amount=1.0):
         """ Append next transaction to blockchain as well as last transaction """
 
+        if self.hosting_node == None:
+            return False
+
         transaction = Transaction(sender, recipient, amount)
 
         if Verification.verify_transaction(transaction, self.get_balance):
@@ -123,6 +126,9 @@ class Blockchain:
 
     def mine_block(self):
         """ Wrap open transactions into a block and append to blockchain """
+
+        if self.hosting_node == None:
+            return False
 
         last_block = self.get_last_blockchain_value()
         hashed_block = hash_block(last_block)
