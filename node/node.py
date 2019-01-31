@@ -60,6 +60,7 @@ class Node:
                 tx_data = self.get_transaction_value()
                 recipient, amount = tx_data
                 # Add transaction amount to blockchain
+                signature = self.wallet.sign_transaction(self.wallet.public_key, recipient, amount)
                 if self.blockchain.add_transaction(recipient, self.wallet.public_key, amount=amount):
                     print('Added transaction')
                 else:
