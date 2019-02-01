@@ -45,7 +45,10 @@ class Wallet:
         return (binascii.hexlify(private_key.exportKey(format='DER')).decode('ascii'), binascii.hexlify(public_key.exportKey(format='DER')).decode('ascii'))
 
     def sign_transaction(self, sender, recipient, amount=1.0):
-        signer = PKCS1_v1_5.new(RSA.importKey(binascii.unhexlify(self.private_key))) 
-        h = SHA256.new((str(sender) + str(recipient) + str(amount)))
+        signer = PKCS1_v1_5.new(RSA.importKey(binascii.unhexlify(self.private_key)))
+        h = SHA256.new((str(sender) + str(recipient) + str(amount)).encode('utf8'))
         signature = signer.sign(h)
-        return binascii.hexlify(signature).decode('ascii')
+        return binascii.hexlify(signature).decode('ascii') 
+        # h = SHA256.new((str(sender) + str(recipient) + str(amount))).encode('utf-8')
+        # signature = signer.sign(h)
+        # return binascii.hexlify(signature).decode('ascii')
