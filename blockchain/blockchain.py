@@ -2,11 +2,14 @@
 import json
 import functools
 
+debug = True
+
 # Custom libraries and classes
 from blocks.block import Block
 from transactions.transaction import Transaction
 from utils.hash_util import hash_block, hash_string_256
 from utils.verification import Verification
+from wallet.wallet import Wallet   
 
 MINING_REWARD = 10
 
@@ -115,10 +118,14 @@ class Blockchain:
         if self.hosting_node == None:
             return False
 
-        transaction = Transaction(sender, recipient, signature, amount)
+        tx = Transaction(sender, recipient, signature, amount)
 
-        if Verification.verify_transaction(transaction, self.get_balance):
-            self.__open_transactions.append(transaction)
+        # Already being used indirectly in Verification class
+        # if not Wallet.verify_transaction(tx):
+        #     return False
+
+        if Verification.verify_transaction(tx, self.get_balance):
+            self.__open_transactions.append(tx)
             self.save_data()
             return True
 
@@ -137,6 +144,10 @@ class Blockchain:
         reward_transaction = Transaction('MINING', self.hosting_node, '', MINING_REWARD)
 
         copied_transactions = self.__open_transactions[:]
+        for tx in copied_transactions:
+            print(tx)
+            if not Wallet.verify_transaction(transaction=tx):
+                return False
         copied_transactions.append(reward_transaction)
 
         block = Block(
