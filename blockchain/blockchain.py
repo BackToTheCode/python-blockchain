@@ -120,7 +120,7 @@ class Blockchain:
 
         tx = Transaction(sender, recipient, signature, amount)
 
-        # Already being used indirectly in Verification class
+        # Already being used indirectly in Verification class   
         # if not Wallet.verify_transaction(tx):
         #     return False
 
